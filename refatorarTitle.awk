@@ -6,26 +6,32 @@
 @include "sliic/libParserFilePath";
 
 BEGIN {
-  findFiles("src", msgs_paths);
+  findFiles(GitPath, msgs_paths);
 }
 
 BEGINFILE {
   convertIso8859ToUtf8();
   parserFilePath(FILENAME, aMetaFile);
-  print FILENAME;
-  print msgProp = locProperties(aMetaFile);
+  msgProp = locProperties(aMetaFile);
 }
 
 /(formView|formTablet|listView).* title=/{
-  print $0;
-  print "controller", controller = locController(FILENAME, aMetaFile);
+  print "== Programa de refatoração de tags que declaram title ==" > "/dev/tty";
+  print " Arquivo:", FILENAME > "/dev/tty";
+  print " Properties:", msgProp > "/dev/tty";
+  print " Refatorar:", $0 > "/dev/tty";
   
-  print getTagDetails($0, tagDetails);
+  controller = locController(FILENAME, aMetaFile);
+  
+  $0 = getTagDetails($0, tagDetails);
+  printf " Para: %s\n\n", $0 > "/dev/tty";
 
-  for (i in tagDetails) {
-    print i, tagDetails[i];
-  }
-  printf "codigo: %s.%s.%s=%s\n", aMetaFile["module"], controller, aMetaFile["file"], tagDetails["title"];  
+  printf "codigo: %s.%s.%s.%sTag=%s\n", aMetaFile["module"], controller,
+         aMetaFile["file"], tagDetails["tag"], tagDetails["title"] >> msgProp;  
+}
+
+{
+  printf "%s", $0;
 }
 
 function getTagDetails(line, tagDetails,     atag, fieldpat, seps, i, instruction) {
@@ -57,6 +63,6 @@ function getTagDetails(line, tagDetails,     atag, fieldpat, seps, i, instructio
   return instruction;
 }
 
-ENDFILE {
+END {
   convertUtf8ToIso8859();
 }
