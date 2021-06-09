@@ -30,9 +30,9 @@ BEGINFILE {
   
   $0 = getTagDetails($0, tagDetails);
   printf " Para: %s\n", $0 > "/dev/tty";
-
-  codigo = sprintf("%s.%s.%s.%sTag=%s", aMetaFile["module"], controller,
-         aMetaFile["file"], tagDetails["tag"], tagDetails["title"]);
+  tagName = toupper(substr(tagDetails["tag"], 1, 1)) substr(tagDetails["tag"], 2) "Tag";
+  codigo = sprintf("%s.%s.%s.%s=%s", aMetaFile["module"], controller,
+         aMetaFile["file"], tagName, tagDetails["title"]);
   printf " Código: %s\n\n", codigo  > "/dev/tty";
   printf "%s\r\n", codigo >> MsgProp;
 }
@@ -44,4 +44,3 @@ BEGINFILE {
 END {
   convertUtf8ToIso8859();
 }
-
