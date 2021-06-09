@@ -1,5 +1,6 @@
 # Arquivo: refatorarTitle.awk
 # Descrição: Refatora tags JSP, conforme api i18n.
+# Uso: awk -v GitPath="/home/leandro/Sliic/git/" -f refatorarTitle.awk src/Sliic_ERP/Sliic_ERP_Modulo_Configuracao/webapp/WEB-INF/jsp/configuracao/perfilVinculacaoListagem.jsp 
 @include "sliic/libLocProperties";
 @include "sliic/libConvIsoUtf";
 @include "sliic/libLocController";
@@ -33,11 +34,11 @@ BEGINFILE {
   codigo = sprintf("%s.%s.%s.%sTag=%s", aMetaFile["module"], controller,
          aMetaFile["file"], tagDetails["tag"], tagDetails["title"]);
   printf " Código: %s\n\n", codigo  > "/dev/tty";
-  print codigo "\r" >> MsgProp;
+  printf "%s\r\n", codigo >> MsgProp;
 }
 
 {
-  printf "%s", $0;
+  printf "%s\n", $0;
 }
 
 END {
