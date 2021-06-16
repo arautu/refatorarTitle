@@ -4,8 +4,9 @@
 # ou pode passar o caminho do projeto por dentro do script, dispensando o uso do argumento
 # na hora de chamar o script.
 
-FONTES=${1:-"src"}
-ABSPATH="/home/leandro/Sliic/git/"
+FONTES=${1:-"sliic-erp/Sliic_ERP/Sliic_ERP_Modulo_Integracao/webapp/WEB-INF/jsp/"}
+# ABSPATH="/home/leandro/Sliic/git/"
+ABSPATH="sliic-erp/"
 
 arquivosEncontrados=($(grep -E -r -l --include=*.jsp "(formView|listView|formTable).* title=" $FONTES))
 

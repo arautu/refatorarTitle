@@ -12,9 +12,9 @@ BEGIN {
 }
 
 BEGINFILE {
-  convertIso8859ToUtf8();
   parserFilePath(FILENAME, aMetaFile);
   MsgProp = locProperties(aMetaFile, msgs_paths);
+  convertIso8859ToUtf8();
 }
 
 /(formView|formTablet|listView).* title=/ {
@@ -27,14 +27,18 @@ BEGINFILE {
   if (!controller) {
     print "Erro: nenhum controller encontrado." > "/dev/tty";
   }
-  
-  $0 = getTagDetails($0, tagDetails);
-  printf " Para: %s\n", $0 > "/dev/tty";
-  tagName = toupper(substr(tagDetails["tag"], 1, 1)) substr(tagDetails["tag"], 2) "Tag.title";
-  codigo = sprintf("%s.%s.%s.%s=%s", aMetaFile["module"], controller,
-         aMetaFile["file"], tagName, tagDetails["title"]);
-  printf " Código: %s\n\n", codigo  > "/dev/tty";
-  printf "%s\r\n", codigo >> MsgProp;
+  if (MsgProp) {
+    $0 = getTagDetails($0, tagDetails);
+    printf " Para: %s\n", $0 > "/dev/tty";
+    tagName = toupper(substr(tagDetails["tag"], 1, 1)) substr(tagDetails["tag"], 2) "Tag.title";
+    codigo = sprintf("%s.%s.%s.%s=%s", aMetaFile["module"], controller,
+           aMetaFile["file"], tagName, tagDetails["title"]);
+    printf " Código: %s\n\n", codigo  > "/dev/tty";
+    printf "%s\r\n", codigo >> MsgProp;
+  }
+  else {
+    print "Erro: Nenhum arquivo de dicionário encontrado." > "/dev/tty";
+  }
 }
 
 {
