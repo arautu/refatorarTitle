@@ -19,7 +19,7 @@ BEGINFILE {
   }
 }
 
-/(formView|formTablet|listView).* title=/ {
+/((form|list)*[vV]iew|formTable).* title=/ {
   print "== Programa de refatoração de tags que declaram title ==" > "/dev/tty";
   print " Arquivo:", FILENAME > "/dev/tty";
   print " Properties:", MsgProp > "/dev/tty";

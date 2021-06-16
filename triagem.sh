@@ -8,7 +8,7 @@ FONTES=${1:-"sliic-erp/Sliic_ERP/Sliic_ERP_Modulo_Integracao/webapp/WEB-INF/jsp/
 # ABSPATH="/home/leandro/Sliic/git/"
 ABSPATH="sliic-erp/"
 
-arquivosEncontrados=($(grep -E -r -l --include=*.jsp "(formView|listView|formTable).* title=" $FONTES))
+arquivosEncontrados=($(grep -E -r -l --include=*.jsp "((form|list)*[vV]iew|formTable).* title=" $FONTES))
 
 echo "Encontrados " ${#arquivosEncontrados[@]} " arquivos."
 
