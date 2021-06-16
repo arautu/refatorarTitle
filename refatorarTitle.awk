@@ -14,7 +14,9 @@ BEGIN {
 BEGINFILE {
   parserFilePath(FILENAME, aMetaFile);
   MsgProp = locProperties(aMetaFile, msgs_paths);
-  convertIso8859ToUtf8();
+  if ("inplace::begin" in FUNCTAB) {
+    convertIso8859ToUtf8();
+  }
 }
 
 /(formView|formTablet|listView).* title=/ {
@@ -34,11 +36,14 @@ BEGINFILE {
     codigo = sprintf("%s.%s.%s.%s=%s", aMetaFile["module"], controller,
            aMetaFile["file"], tagName, tagDetails["title"]);
     printf " Código: %s\n\n", codigo  > "/dev/tty";
-    printf "%s\r\n", codigo >> MsgProp;
+    
+    if ("inplace::begin" in FUNCTAB) {
+      printf "%s\r\n", codigo >> MsgProp;
+    }
   }
   else {
     print "Erro: Nenhum arquivo de dicionário encontrado." > "/dev/tty";
-  }
+}
 }
 
 {
@@ -46,5 +51,7 @@ BEGINFILE {
 }
 
 END {
-  convertUtf8ToIso8859();
+  if ("inplace::begin" in FUNCTAB) {
+    convertUtf8ToIso8859();
+  }
 }
