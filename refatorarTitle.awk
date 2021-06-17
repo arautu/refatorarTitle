@@ -47,7 +47,7 @@ BEGINFILE {
 }
 
 {
-  printf "%s\n", $0;
+  printf "%s%s", $0, RT;
 }
 
 END {
