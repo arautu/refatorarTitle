@@ -5,6 +5,7 @@
 @include "sliic/libConvIsoUtf";
 @include "sliic/libLocController";
 @include "sliic/libParserFilePath";
+@include "sliic/libJavaParser"
 @include "libRefatorarTitle";
 
 BEGIN {
@@ -14,27 +15,26 @@ BEGIN {
 BEGINFILE {
   parserFilePath(FILENAME, aMetaFile);
   MsgProp = locProperties(aMetaFile, msgs_paths);
-  if ("inplace::begin" in FUNCTAB) {
-    convertIso8859ToUtf8();
-  }
+  convertIso8859ToUtf8();
 }
 
 /(:(form|list)*[vV]iew|formTable).* title=/ {
-  print "== Programa de refatoração de tags que declaram title ==" > "/dev/tty";
+  print "\n== Programa de refatoração de tags que declaram title ==\n" > "/dev/tty";
   print " Arquivo:", FILENAME > "/dev/tty";
   print " Properties:", MsgProp > "/dev/tty";
-  print " Refatorar:", $0 > "/dev/tty";
   
   controller = locController(FILENAME, aMetaFile);
-  if (!controller) {
-    print "Erro: nenhum controller encontrado." > "/dev/tty";
-  }
   if (MsgProp) {
+    fmt = removerIdentacao($0);
+    printf " Refatorar:\t%s\n", fmt > "/dev/tty";
+
     $0 = getTagDetails($0, tagDetails);
-    printf " Para: %s\n", $0 > "/dev/tty";
+    fmt = removerIdentacao($0);
+    printf " Para:\t\t%s\n", fmt > "/dev/tty";
+    
     tagName = toupper(substr(tagDetails["tag"], 1, 1)) substr(tagDetails["tag"], 2) "Tag.title";
     codigo = sprintf("%s.%s.%s.%s=%s", aMetaFile["module"], controller,
-           aMetaFile["file"], tagName, tagDetails["title"]);
+        aMetaFile["file"], tagName, tagDetails["title"]);
     printf " Código: %s\n\n", codigo  > "/dev/tty";
     
     if ("inplace::begin" in FUNCTAB) {
@@ -47,11 +47,11 @@ BEGINFILE {
 }
 
 {
-  printf "%s%s", $0, RT;
+  if ("inplace::begin" in FUNCTAB) {
+    printf "%s%s", $0, RT;
+  }
 }
 
 END {
-  if ("inplace::begin" in FUNCTAB) {
-    convertUtf8ToIso8859();
-  }
+  convertUtf8ToIso8859();
 }

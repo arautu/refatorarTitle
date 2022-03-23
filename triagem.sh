@@ -5,8 +5,8 @@
 # na hora de chamar o script.
 
 FONTES=${1:-"sliic-erp/Sliic_ERP/Sliic_ERP_Modulo_Integracao/webapp/WEB-INF/jsp/"}
-ABSPATH="/home/leandro/Sliic/git/"
-# ABSPATH="sliic-erp/"
+# ABSPATH="/home/leandro/Sliic/git/"
+ABSPATH="sliic-erp/"
 
 arquivosEncontrados=($(grep -E -r -l --include=*.jsp "((form|list)*[vV]iew|formTable).* title=" $FONTES))
 
