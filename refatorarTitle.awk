@@ -8,7 +8,7 @@
 @include "libRefatorarTitle";
 
 BEGIN {
-  findFiles(GitPath, msgs_paths);
+  findFiles(msgs_paths);
 }
 
 BEGINFILE {
